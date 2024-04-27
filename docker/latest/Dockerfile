@@ -21,6 +21,10 @@ RUN apt update -o Acquire::Check-Valid-Until=false -o Acquire::AllowInsecureRepo
     apt install -y sudo ca-certificates && \
     apt autoremove -y
 
+# Install libdw and git large file system
+RUN apt-get install -y libdw-dev git-lfs
+
+# Install Ceres Solver from source
 RUN apt install -y cmake libgoogle-glog-dev libgflags-dev libatlas-base-dev libeigen3-dev libsuitesparse-dev && \
     git clone --recursive https://github.com/ceres-solver/ceres-solver.git ${HOME_FOLDER}/ceres-solver -b 2.0.0 && \
     mkdir -p ${HOME_FOLDER}/ceres-solver/build && \
@@ -29,6 +33,7 @@ RUN apt install -y cmake libgoogle-glog-dev libgflags-dev libatlas-base-dev libe
     make install -j$(($(nproc)-1)) && \
     rm -rf ${HOME_FOLDER}/ceres-solver
 
+# Install SymEngine from source
 RUN apt install -y cmake libgmp-dev && \
     git clone --recursive https://github.com/symengine/symengine.git ${HOME_FOLDER}/symengine && \
     mkdir -p ${HOME_FOLDER}/symengine/build && \
