@@ -1,7 +1,7 @@
 %YAML 1.2
 ---
 
-#common parameters
+# Common parameters
 image0_topic: /camera/infra1/image_rect_raw
 image1_topic: /camera/infra2/image_rect_raw
 
@@ -30,7 +30,7 @@ body_T_cam1: !!opencv-matrix
 
 max_freq: 20                # max frequency of processing image
 
-#feature traker paprameters
+#feature tracker parameters
 max_cnt: 150                # max feature number in feature tracking
 min_cnt: 20                 # min feature number in feature tracking
 min_dist: 30                # min distance between two features

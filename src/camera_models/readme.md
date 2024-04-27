@@ -1,4 +1,4 @@
-# Instruction
+# camera_models
 
 part of [camodocal](https://github.com/hengli/camodocal)
 

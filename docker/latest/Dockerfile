@@ -1,5 +1,5 @@
 # Do not add --platform=linux/blabla since this is intended for multiplatform builds
-FROM tomnotch/bipvrobotics-base-image:ros1
+FROM tomnotch/bipvrobotics-base-image:ros1 AS base
 ENV HOME_FOLDER=/root
 WORKDIR $HOME_FOLDER/
 
@@ -13,7 +13,7 @@ COPY --from=home-folder-config . $HOME_FOLDER/
 # Install pre-commit hooks
 RUN git init && \
     pre-commit install-hooks && \
-    rm -rf .git
+    rm -rf .git .pre-commit-config.yaml
 
 # update all obsolete packages to latest, install sudo, and cleanup
 RUN apt update -o Acquire::Check-Valid-Until=false -o Acquire::AllowInsecureRepositories=true -o Acquire::AllowDowngradeToInsecureRepositories=true && \
@@ -21,7 +21,6 @@ RUN apt update -o Acquire::Check-Valid-Until=false -o Acquire::AllowInsecureRepo
     apt install -y sudo ca-certificates && \
     apt autoremove -y
 
-# Install Ceres Solver from source
 RUN apt install -y cmake libgoogle-glog-dev libgflags-dev libatlas-base-dev libeigen3-dev libsuitesparse-dev && \
     git clone --recursive https://github.com/ceres-solver/ceres-solver.git ${HOME_FOLDER}/ceres-solver -b 2.0.0 && \
     mkdir -p ${HOME_FOLDER}/ceres-solver/build && \
@@ -29,6 +28,14 @@ RUN apt install -y cmake libgoogle-glog-dev libgflags-dev libatlas-base-dev libe
     cmake .. && \
     make install -j$(($(nproc)-1)) && \
     rm -rf ${HOME_FOLDER}/ceres-solver
+
+RUN apt install -y cmake libgmp-dev && \
+    git clone --recursive https://github.com/symengine/symengine.git ${HOME_FOLDER}/symengine && \
+    mkdir -p ${HOME_FOLDER}/symengine/build && \
+    cd ${HOME_FOLDER}/symengine/build && \
+    cmake .. && \
+    make install -j$(($(nproc)-1)) && \
+    rm -rf ${HOME_FOLDER}/symengine
 
 # # Install ArUco from source
 # RUN wget https://sourceforge.net/projects/aruco/files/latest -O ${HOME_FOLDER}/aruco.zip && \

@@ -272,7 +272,7 @@ int main(int argc, char** argv)
                   0.5,
                   cv::Scalar(255, 255, 255),
                   1,
-                  CV_AA);
+                  cv::LINE_AA);
       cv::imshow("Image", cbImages.at(i));
       cv::waitKey(0);
     }
